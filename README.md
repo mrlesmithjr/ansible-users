@@ -24,6 +24,7 @@ create_users:  #defines user accounts to setup on hosts....define here or in gro
     pass: demo_password  #define password for account
     setup: false  #true=creates account|false=removes account if exists...true|false
     shell: ''  #define a different shell for the user
+    preseed_user: false  #defines if user should be setup as default user during preseed auto-install...Only 1 user can be added...used in tftpserver Ansible role (mrlesmithjr.tftpserver or ansible-tftpserver)
     sudo: false  #define if user should have sudo access...true|false
     system_account: false  #define if account is a system account...true|falseinstall_fail2ban: false
 ````
