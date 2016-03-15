@@ -1,5 +1,5 @@
 ---
-- name: users | creating user accounts
+- name: users | managing user accounts
   user:
     name: "{{ item.user }}"
     password: "{{ item.pass }}"
