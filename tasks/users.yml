@@ -1,16 +1,67 @@
 ---
 - name: users | creating user accounts
   user:
-    comment: "{{ item.comment|default(omit) }}"
-    expires: "{{ item.expires|default(omit) }}"
-    generate_ssh_key: "{{ item.generate_keys|default(omit) }}"
-    home: "{{ item.home|default(omit) }}"
     name: "{{ item.user }}"
-    password: "{{ item.pass|default(omit) }}"
-    shell: "{{ item.shell|default(omit) }}"
-    state: "{{ item.state }}"
-    system: "{{ item.system_account|default(omit) }}"
+    password: "{{ item.pass }}"
+    shell: "{{ item.shell|default (omit) }}"
+    comment: "{{ item.comment|default (omit) }}"
+    state: present
   with_items: '{{ create_users }}'
+  when: >
+        item.setup and
+        not item.generate_keys and
+        not item.system_account
+
+- name: users | creating user accounts and generating ssh_keys
+  user:
+    name: "{{ item.user }}"
+    password: "{{ item.pass }}"
+    shell: "{{ item.shell|default (omit) }}"
+    comment: "{{ item.comment|defaut (omit) }}"
+    generate_ssh_key: yes
+    state: present
+  with_items: '{{ create_users }}'
+  when: >
+        item.setup and
+        item.generate_keys and
+        not item.system_account
+
+- name: users | creating system accounts
+  user:
+    name: "{{ item.user }}"
+    password: "{{ item.pass }}"
+    shell: "{{ item.shell|default (omit) }}"
+    comment: "{{ item.comment|default (omit) }}"
+    system: yes
+    state: present
+  with_items: '{{ create_users }}'
+  when: >
+        item.setup and
+        not item.generate_keys and
+        item.system_account
+
+- name: users | creating system accounts and generating ssh_keys
+  user:
+    name: "{{ item.user }}"
+    password: "{{ item.pass }}"
+    shell: "{{ item.shell|default (omit) }}"
+    comment: "{{ item.comment|default (omit) }}"
+    generate_ssh_key: yes
+    system: yes
+    state: present
+  with_items: '{{ create_users }}'
+  when: >
+        item.setup and
+        item.generate_keys and
+        item.system_account
+
+- name: users | removing user accounts
+  user:
+    name: "{{ item.user }}"
+    password: "{{ item.pass }}"
+    state: absent
+  with_items: '{{ create_users }}'
+  when: not item.setup
 
 - name: users | adding users to sudoers
   lineinfile:
