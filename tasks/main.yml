@@ -5,6 +5,5 @@
     - setup_users
     - users
   when: >
-        (create_local_users is defined and
-        create_local_users) and
+        create_local_users and
         create_users is defined
