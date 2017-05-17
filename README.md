@@ -3,6 +3,11 @@ Role Name
 
 Manages local users on systems.
 
+Build Status
+------------
+
+[![Build Status](https://travis-ci.org/mrlesmithjr/ansible-users.svg?branch=master)](https://travis-ci.org/mrlesmithjr/ansible-users)
+
 Requirements
 ------------
 
