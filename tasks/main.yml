@@ -1,8 +1,16 @@
 ---
 # tasks file for ansible-users
 
-- include: users.yml
+- name: Include user account management tasks
+  ansible.builtin.include_tasks: users.yml
   tags:
     - setup_users
     - users
   when: users_manage_accounts
+
+- name: Include Samba account registration tasks
+  ansible.builtin.include_tasks: samba.yml
+  tags:
+    - samba
+    - users
+  when: users_manage_samba_accounts | bool

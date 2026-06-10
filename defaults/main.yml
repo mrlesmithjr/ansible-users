@@ -3,24 +3,34 @@
 
 users_manage_accounts: false
 
+# When true, register users that have a samba_password field with smbpasswd.
+users_manage_samba_accounts: false
+
+# Package providing smbpasswd. Debian/Ubuntu ships it in samba-common-bin;
+# RHEL/Rocky/AlmaLinux ship it in samba-common.
+users_smbpasswd_package: "{{ 'samba-common-bin' if ansible_os_family == 'Debian' else 'samba-common' }}"
+
 # The default defined users_accounts needs to be defined as {} if not defining
 # actual users. This is because we are using with_dict rather than with_items.
+# Example:
+# users:
+#   demo-user-01:
+#     comment: Demo user 01
+#     generate_keys: true
+#     # home: /home/demo-user-01
+#     password: demo_password
+#     # samba_password: samba_demo_password  # optional: registers user with smbpasswd
+#     # shell: /bin/bash
+#     state: present
+#     sudo: false
+#     system_account: false
+#   demo-user-02:
+#     comment: Demo user 02
+#     generate_keys: true
+#     # home: /home/demo-user-02
+#     password: demo_password
+#     # shell: /bin/bash
+#     state: absent
+#     sudo: false
+#     system_account: false
 users: {}
-  # demo-user-01:
-  #   comment: Demo user 01
-  #   generate_keys: true
-  #   # home: /home/demo-user-01
-  #   password: demo_password
-  #   # shell: /bin/bash
-  #   state: present
-  #   sudo: false
-  #   system_account: false
-  # demo-user-02:
-  #   comment: Demo user 02
-  #   generate_keys: true
-  #   # home: /home/demo-user-02
-  #   password: demo_password
-  #   # shell: /bin/bash
-  #   state: absent
-  #   sudo: false
-  #   system_account: false

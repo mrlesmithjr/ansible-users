@@ -1,18 +1,18 @@
 ---
-- name: users | Managing Users
-  user:
+- name: Users | Managing Users
+  ansible.builtin.user:
     name: "{{ item['key'] }}"
     password: "{{ item['value']['password'] }}"
-    shell: "{{ item['value']['shell']|default (omit) }}"
-    comment: "{{ item['value']['comment']|default (omit) }}"
-    generate_ssh_key: "{{ item['value']['generate_keys']|default (omit) }}"
-    system: "{{ item['value']['system_account']|default (omit) }}"
+    shell: "{{ item['value']['shell'] | default(omit) }}"
+    comment: "{{ item['value']['comment'] | default(omit) }}"
+    generate_ssh_key: "{{ item['value']['generate_keys'] | default(omit) }}"
+    system: "{{ item['value']['system_account'] | default(omit) }}"
     state: "{{ item['value']['state'] }}"
   become: true
   with_dict: "{{ users }}"
 
-- name: users | Adding Users To sudoers
-  lineinfile:
+- name: Users | Adding Users To sudoers
+  ansible.builtin.lineinfile:
     dest: /etc/sudoers
     regexp: "^{{ item['key'] }} ALL"
     line: "{{ item['key'] }} ALL=(ALL) NOPASSWD:ALL"
@@ -24,8 +24,8 @@
         item['value']['state'] == "present" and
         item['value']['sudo']
 
-- name: users | Removing Users From sudoers
-  lineinfile:
+- name: Users | Removing Users From sudoers
+  ansible.builtin.lineinfile:
     dest: /etc/sudoers
     regexp: "^{{ item['key'] }} ALL"
     line: "{{ item['key'] }} ALL=(ALL) NOPASSWD:ALL"

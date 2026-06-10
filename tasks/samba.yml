@@ -1,0 +1,33 @@
+---
+# tasks for Samba account registration
+
+- name: Users | Install smbpasswd package
+  ansible.builtin.package:
+    name: "{{ users_smbpasswd_package }}"
+    state: present
+  become: true
+
+- name: Users | Register Samba account via smbpasswd
+  ansible.builtin.shell: |
+    set -o pipefail
+    printf '%s\n%s\n' "${SAMBA_PASSWORD}" "${SAMBA_PASSWORD}" \
+      | smbpasswd -s -a {{ item.key }}
+  environment:
+    SAMBA_PASSWORD: "{{ item.value.samba_password }}"
+  register: _users_smbpasswd_result
+  become: true
+  no_log: true
+  loop: "{{ users | dict2items | selectattr('value.samba_password', 'defined') | list }}"
+  when: item.value.state | default('present') == 'present'
+  changed_when: "'Added user' in _users_smbpasswd_result.stdout"
+
+- name: Users | Remove Samba accounts for absent users
+  ansible.builtin.shell: |
+    set -o pipefail
+    smbpasswd -x {{ item.key }}
+  become: true
+  no_log: true
+  loop: "{{ users | dict2items | selectattr('value.samba_password', 'defined') | list }}"
+  when: item.value.state | default('present') == 'absent'
+  changed_when: true
+  failed_when: false
