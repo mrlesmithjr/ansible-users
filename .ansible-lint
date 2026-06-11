@@ -1,6 +1,8 @@
 ---
 profile: production
 skip_list:
+  # Intentional: directory is named ansible-users following Galaxy's ansible- prefix convention,
+  # which trips the role-name rule that expects a bare name (e.g. users). Not an oversight.
   - role-name
 exclude_paths:
   - tests/
