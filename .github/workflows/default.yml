@@ -1,0 +1,35 @@
+---
+name: CI
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    - cron: '0 6 * * 0'
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install ansible-lint yamllint
+      - run: yamllint .
+      - run: ansible-lint
+  syntax-check:
+    name: Syntax Check (Ansible ${{ matrix.ansible-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ansible-version: ['2.15', '2.16', '2.17', '2.18']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install "ansible-core~=${{ matrix.ansible-version }}"
+      - run: printf '[defaults]\nroles_path=../' >ansible.cfg
+      - run: ansible-playbook tests/test.yml -i tests/inventory --syntax-check

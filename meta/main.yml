@@ -3,34 +3,24 @@ galaxy_info:
   author: Larry Smith Jr.
   description: Manages local users on systems.
 
-  license: license (MIT)
-  min_ansible_version: 1.2
+  license: MIT
+  min_ansible_version: "2.9"
 
   platforms:
-  - name: EL
-    versions:
-      - 6
-      - 7
-  - name: Fedora
-    versions:
-      - 21
-      - 22
-  - name: Ubuntu
-    versions:
-      - precise
-      - quantal
-      - raring
-      - saucy
-      - trusty
-      - utopic
-      - vivid
-      - xenial
-  - name: Debian
-    versions:
-      - jessie
-      - wheezy
+    - name: EL
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
 
-  categories:
+  galaxy_tags:
     - system
 
 dependencies: []

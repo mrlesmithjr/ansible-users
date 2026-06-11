@@ -1,5 +1,6 @@
 ---
-- hosts: test_nodes
+- name: Apply ansible-users role
+  hosts: test_nodes
   vars:
     pri_domain_name: test.vagrant.local
     users:
